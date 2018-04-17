@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/globalsign/mgo"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"gopkg.in/mgo.v2"
 )
 
 var testAccMongoDBUserConfig = fmt.Sprintf(`
