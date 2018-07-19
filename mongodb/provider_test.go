@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
+	"github.com/globalsign/mgo"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
-	"gopkg.in/mgo.v2"
 )
 
 var testAccProviders map[string]terraform.ResourceProvider

@@ -6,6 +6,9 @@ default: build
 build: fmtcheck
 	go install
 
+release:
+	gox -osarch "darwin/amd64 linux/amd64" -ldflags '-extldflags "-static"' -output "releases/{{.OS}}_{{.Arch}}/terraform-provider-mongodb"
+
 test: fmtcheck
 	go test -i $(TEST) || exit 1
 	echo $(TEST) | \

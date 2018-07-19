@@ -1,7 +1,11 @@
 package mongodb
 
 import (
-	"gopkg.in/mgo.v2"
+	"crypto/tls"
+	"net"
+	"net/url"
+
+	"github.com/globalsign/mgo"
 )
 
 type Config struct {
@@ -9,10 +13,27 @@ type Config struct {
 }
 
 func (c *Config) loadAndValidate() (*mgo.Session, error) {
-	session, err := mgo.Dial(c.URL)
+	mURI, err := url.Parse(c.URL)
 	if err != nil {
 		return nil, err
 	}
 
-	return session, nil
+	qs := mURI.Query()
+	ssl := qs.Get("ssl") == "true"
+	qs.Del("ssl") // won't parse otherwise
+	mURI.RawQuery = qs.Encode()
+
+	dialInfo, err := mgo.ParseURL(mURI.String())
+	if err != nil {
+		return nil, err
+	}
+
+	if ssl {
+		dialInfo.DialServer = func(addr *mgo.ServerAddr) (net.Conn, error) {
+			tlsConfig := &tls.Config{}
+			return tls.Dial("tcp", addr.String(), tlsConfig)
+		}
+	}
+
+	return mgo.DialWithInfo(dialInfo)
 }

@@ -3,8 +3,8 @@ package mongodb
 import (
 	"bytes"
 
+	"github.com/globalsign/mgo"
 	"github.com/hashicorp/terraform/helper/schema"
-	"gopkg.in/mgo.v2"
 )
 
 func resourceMongoDBUser() *schema.Resource {
